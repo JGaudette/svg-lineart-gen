@@ -40,7 +40,8 @@ app.get('/', async (req, res) => {
   });
 });
 
-app.listen(3000, '0.0.0.0', () => console.log('server listening on port 3000!'))
+const port = process.env.port;
+app.listen(port, '0.0.0.0', () => console.log('server listening on port ' + port + !'))
 
 
 
