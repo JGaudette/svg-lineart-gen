@@ -1,0 +1,19 @@
+{
+  "name": "svg-lineart-gen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "dbuild": "docker build . -t hatchery/lineart-gen",
+    "drun": "docker run -it -p 3000:4000 hatchery/lineart-gen"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.18.3",
+    "randomstring": "^1.1.5"
+  }
+}
