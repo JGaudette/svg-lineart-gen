@@ -29,14 +29,17 @@ app.get('/', async (req, res) => {
 
   const filename = randomstring.generate();
 
-  await downloadFile(req.query.url, filename);
-  exec('./process.sh ' + filename, {maxBuffer: 1024 * 500}, (err, stdout, stderr) => {
+  const cmd = './process.sh "' + req.query.url + '"';
+  console.log("calling: " + cmd);
+  exec(cmd, {maxBuffer: 1024 * 500}, (err, stdout, stderr) => {
     if(err){
       console.log("ERROR: " + err);
     }
 
+    console.log("returning: " + stdout);
+
+    res.setHeader('content-type', 'text/xml');
     res.send(stdout);
-    exec('rm -f ' + filename);
   });
 });
 
