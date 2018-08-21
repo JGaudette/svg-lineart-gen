@@ -8,7 +8,10 @@ const { exec } = require('child_process');
 
 function downloadFile(url, filename){
   return new Promise( (resolve) => {
-    exec('wget "' + url + '" -o ' + filename, (err, stdout, stderr) => {
+    const cmd = 'wget "' + url + '" -O ' + filename;
+
+    console.log("cmd: " + cmd);
+    exec(cmd, (err, stdout, stderr) => {
       if(err){
         console.log("ERROR: " + err);
       }
@@ -27,13 +30,17 @@ app.get('/', async (req, res) => {
   const filename = randomstring.generate();
 
   await downloadFile(req.query.url, filename);
-  exec('./test.sh ' + filename, {maxBuffer: 1024 * 500}, (err, stdout, stderr) => {
+  exec('./process.sh ' + filename, {maxBuffer: 1024 * 500}, (err, stdout, stderr) => {
     if(err){
       console.log("ERROR: " + err);
     }
 
     res.send(stdout);
+    exec('rm -f ' + filename);
   });
 });
 
 app.listen(3000, () => console.log('server listening on port 3000!'))
+
+
+
