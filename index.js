@@ -29,7 +29,11 @@ app.get('/', async (req, res) => {
 
   const filename = randomstring.generate();
 
-  const cmd = './process.sh "' + req.query.url + '"';
+  let cmd = './process_sqip.sh "' + req.query.url + '" ' + filename;
+  if(req.query.type && req.query.type === 'line'){
+    cmd = './process_lineart.sh "' + req.query.url + '"';
+  }
+
   console.log("calling: " + cmd);
   exec(cmd, {maxBuffer: 1024 * 500}, (err, stdout, stderr) => {
     if(err){
@@ -38,7 +42,8 @@ app.get('/', async (req, res) => {
 
     console.log("returning: " + stdout);
 
-    res.setHeader('content-type', 'text/xml');
+    //res.setHeader('content-type', 'text/xml');
+    res.setHeader('content-type', 'image/svg+xml');
     res.send(stdout);
   });
 });

@@ -12,7 +12,7 @@ RUN apt-get install -y nodejs
 RUN apt-get install -y imagemagick
 
 RUN apt-get -y install potrace
-RUN npm install -g svgo
+RUN npm install -g svgo sqip
 
 WORKDIR .
 ADD . .
