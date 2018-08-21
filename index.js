@@ -4,6 +4,8 @@ const app = express()
 const randomstring = require("randomstring");
 const { exec } = require('child_process');
 
+let SQIP_CACHE = {};
+let LINE_CACHE = {};
 
 
 function downloadFile(url, filename){
@@ -29,9 +31,25 @@ app.get('/', async (req, res) => {
 
   const filename = randomstring.generate();
 
+  let type = 'sqip';
   let cmd = './process_sqip.sh "' + req.query.url + '" ' + filename;
   if(req.query.type && req.query.type === 'line'){
+    type='line';
     cmd = './process_lineart.sh "' + req.query.url + '"';
+  }
+
+
+  // cache check
+  if(type === 'sqip' && SQIP_CACHE[req.query.url]){
+    console.log("sqip cache hit");
+    res.setHeader('content-type', 'image/svg+xml');
+    res.send(SQIP_CACHE[req.query.url]);
+    return;
+  }else if(type === 'line' && LINE_CACHE[req.query.url]){
+    console.log("line cache hit");
+    res.setHeader('content-type', 'image/svg+xml');
+    res.send(LINE_CACHE[req.query.url]);
+    return;
   }
 
   console.log("calling: " + cmd);
@@ -41,8 +59,14 @@ app.get('/', async (req, res) => {
     }
 
     console.log("returning: " + stdout);
+    if(stdout !== ''){
+      if(type === 'sqip'){
+        SQIP_CACHE[req.query.url] = stdout;
+      }else{
+        LINE_CACHE[req.query.url] = stdout;
+      }
+    }
 
-    //res.setHeader('content-type', 'text/xml');
     res.setHeader('content-type', 'image/svg+xml');
     res.send(stdout);
   });
