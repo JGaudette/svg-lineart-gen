@@ -40,8 +40,8 @@ app.get('/', async (req, res) => {
   });
 });
 
-const port = process.env.port;
-app.listen(port, '0.0.0.0', () => console.log('server listening on port ' + port + !'))
+const port = process.env.PORT || 3000;
+app.listen(port, '0.0.0.0', () => console.log('server listening on port ' + port + '!'))
 
 
 
