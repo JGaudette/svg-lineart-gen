@@ -8,21 +8,6 @@ let SQIP_CACHE = {};
 let LINE_CACHE = {};
 
 
-function downloadFile(url, filename){
-  return new Promise( (resolve) => {
-    const cmd = 'wget "' + url + '" -O ' + filename;
-
-    console.log("cmd: " + cmd);
-    exec(cmd, (err, stdout, stderr) => {
-      if(err){
-        console.log("ERROR: " + err);
-      }
-
-      resolve();
-    });
-  });
-}
-
 app.get('/', async (req, res) => {
   if(!req.query.url){
     res.send('no url provided');
